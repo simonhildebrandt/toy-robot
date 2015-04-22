@@ -5,6 +5,6 @@ RSpec::Matchers.define :report do |expected|
     actual.report == expected
   end
   failure_message do |actual|
-    "expected that #{actual} would report #{actual.report} instead of #{expected}"
+    "expected that #{actual} would report #{expected} instead of #{actual.report}"
   end
 end
