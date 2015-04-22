@@ -14,14 +14,30 @@ class Field
   end
 
   def move
+    return unless placed?
 
+    delta_x, delta_y = MOVES[@direction]
+    position!(x + delta_x, y + delta_y)
+  end
+
+  def x
+    @location[0]
+  end
+
+  def y
+    @location[1]
   end
 
   def turn
 
   end
 
-  def position!(x, y, direction)
+  def placed?
+    @placed
+  end
+
+  def position!(x, y, direction=nil)
+    direction ||= @direction
     return unless valid_position?(x, y) and valid_direction?(direction)
     @location = [x, y]
     @direction = direction
@@ -36,6 +52,6 @@ class Field
   end
 
   def report
-    @location + [@direction] if @placed
+    @location + [@direction] if placed?
   end
 end
