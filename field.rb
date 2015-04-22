@@ -17,19 +17,26 @@ class Field
     return unless placed?
 
     delta_x, delta_y = MOVES[@direction]
-    position!(x + delta_x, y + delta_y)
+    position!(current_x + delta_x, current_y + delta_y)
   end
 
-  def x
+  def current_x
     @location[0]
   end
 
-  def y
+  def current_y
     @location[1]
   end
 
-  def turn
+  def turn(direction)
+    return unless placed?
+    offset = direction == :left ? -1 : 1
+    new_direction = directions[directions.index(@direction) + offset]
+    position!(current_x, current_y, new_direction)
+  end
 
+  def directions
+    MOVES.keys
   end
 
   def placed?
