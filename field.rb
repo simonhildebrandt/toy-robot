@@ -8,7 +8,7 @@ class Field
   }
 
   def place(x, y, direction)
-    if position!(x, y, direction)
+    if position!(x: x, y: y, direction: direction)
       @placed = true
     end
   end
@@ -17,7 +17,7 @@ class Field
     return unless placed?
 
     delta_x, delta_y = MOVES[@direction]
-    position!(current_x + delta_x, current_y + delta_y)
+    position!(x: current_x + delta_x, y: current_y + delta_y)
   end
 
   def current_x
@@ -28,23 +28,38 @@ class Field
     @location[1]
   end
 
+  def current_direction
+    @direction
+  end
+
   def turn(direction)
     return unless placed?
     offset = direction == :left ? -1 : 1
-    new_direction = directions[directions.index(@direction) + offset]
-    position!(current_x, current_y, new_direction)
-  end
-
-  def directions
-    MOVES.keys
+    position!(direction: offset_direction(offset))
   end
 
   def placed?
     @placed
   end
 
-  def position!(x, y, direction=nil)
-    direction ||= @direction
+  def report
+    @location + [current_direction] if placed?
+  end
+
+  private
+  
+  def offset_direction(offset)
+    directions[directions.index(current_direction) + offset]
+  end
+
+  def directions
+    MOVES.keys
+  end
+
+  def position!(options)
+    x = options[:x] || current_x
+    y = options[:y] || current_y
+    direction = options[:direction] || current_direction
     return unless valid_position?(x, y) and valid_direction?(direction)
     @location = [x, y]
     @direction = direction
@@ -56,9 +71,5 @@ class Field
 
   def valid_direction?(direction)
     MOVES.keys.include? direction
-  end
-
-  def report
-    @location + [@direction] if placed?
   end
 end
