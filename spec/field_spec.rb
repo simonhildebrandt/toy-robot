@@ -7,5 +7,7 @@ describe Field do
     it { subject.turn; is_expected.to report(nil) }
   end
 
-  
+  context "understands placing the robot" do
+    it { subject.place(0, 0, 'NORTH'); is_expected.to report([0, 0, 'NORTH']) }
+  end
 end
